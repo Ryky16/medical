@@ -1,0 +1,48 @@
+# ===========================================
+# ✅ Activer le moteur de réécriture
+# ===========================================
+RewriteEngine On
+
+# ===========================================
+# ✅ Rediriger les URLs sans extension vers les fichiers PHP
+# Exemple : /login → /login.php
+# ===========================================
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.*)$ $1.php [NC,L]
+
+# ===========================================
+# ✅ Rediriger les URLs avec .php vers l’URL sans extension
+# Exemple : /login.php → /login
+# ===========================================
+RewriteCond %{THE_REQUEST} \s([^.]+)\.php[\s?] [NC]
+RewriteRule ^ %1 [R=301,L,NC]
+
+# ===========================================
+# ✅ Interdire l’accès aux fichiers sensibles
+# ===========================================
+<FilesMatch "\.(env|git|htaccess|htpasswd|ini|log|sh)$">
+    Require all denied
+</FilesMatch>
+
+# ===========================================
+# ✅ Désactiver l'affichage des fichiers d’un dossier (ex: /uploads/)
+# ===========================================
+Options -Indexes
+
+# ===========================================
+# ✅ Gzip compression (uniquement en ligne, si le module est actif)
+# ===========================================
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json
+</IfModule>
+
+# ===========================================
+# ✅ Protection anti-hotlinking (facultatif)
+# ===========================================
+#<IfModule mod_rewrite.c>
+#    RewriteCond %{HTTP_REFERER} !^$
+#    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?tonsite\.com [NC]
+#    RewriteRule \.(jpg|jpeg|png|gif)$ - [F]
+#</IfModule>
+
