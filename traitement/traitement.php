@@ -1,7 +1,8 @@
 <?php
 session_start();
-include 'fonction.php';
-
+include 'traitement/connect.php';
+include 'traitement/fonction.php';
+ 
 // Vérifier si les données du formulaire sont définies
 //#################################### DEBUT Enregister une Panne #####################################################
 if ($_SERVER['REQUEST_METHOD'] == 'POST' &&
@@ -26,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' &&
             notifierUrgence($connexion, $type_panne, $description, $localisation);
         }
         header('Location: ../profils/residence/ajoutPanne?success=1');
-        exit();
+        exit(); 
     } else {
         header('Location: ../profils/residence/ajoutPanne');
         exit();
@@ -74,8 +75,8 @@ if (
         : null;
 
     // Convertir la date de dd/mm/yyyy vers yyyy-mm-dd
-    $date_intervention = date('d/m/Y', strtotime(str_replace('-', '/', $date_intervention)));
-    $date_sys = date('d/m/Y');;
+    $date_intervention = date('Y-m-d', strtotime(str_replace('-', '/', $date_intervention)));
+    $date_sys = date('Y-m-d');
 
     $resultat = "en cours";
 

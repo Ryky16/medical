@@ -91,7 +91,7 @@ function login($username, $password)
     }
 
     $stmt->close();
-    return false;
+    return false; 
 }
 
 // FONCTION POUR UNE ORIENTATION MEDICALES
@@ -1231,7 +1231,7 @@ function traiterOrientation($connexion, $id, $action, $id_user)
     $result = $stmt->execute();
 
     $stmt->close();
-
+ 
     return $result;
 }
 
@@ -1346,7 +1346,7 @@ function sms_compte_created($numero_destinataire, $login, $prenoms, $default_mdp
         ),
     ));
     $response = curl_exec($curl);
-    curl_close($curl);
+    //curl_close($curl);
 
     /*if ($err) {
       echo "cURL Error #:" . $err;
@@ -1521,5 +1521,27 @@ function envoyerEmail($to, $subject, $message)
     } catch (Exception $e) {
         return 'Erreur : ' . $mail->ErrorInfo;
     }
+}
+
+function enregistrerIntervention($connexion, $date_intervention, $description_action, $personne_agent, $date_sys, $resultat, $id_chef_atelier, $id_panne) {
+    $stmt = $connexion->prepare('INSERT INTO Intervention (date_intervention, description_action, personne_agent, date_sys, resultat, id_chef_atelier, id_panne) VALUES (?, ?, ?, ?, ?, ?, ?)');
+    if (!$stmt) {
+        return false;
+    }
+    $stmt->bind_param('sssssii', $date_intervention, $description_action, $personne_agent, $date_sys, $resultat, $id_chef_atelier, $id_panne);
+    $result = $stmt->execute();
+    $stmt->close();
+    return $result;
+}
+
+function updateIntervention($connexion, $date_intervention, $description_action, $personne_agent, $date_sys, $resultat, $id_chef_atelier, $id_panne, $intervention_id) {
+    $stmt = $connexion->prepare('UPDATE Intervention SET date_intervention = ?, description_action = ?, personne_agent = ?, date_sys = ?, resultat = ?, id_chef_atelier = ?, id_panne = ? WHERE id = ?');
+    if (!$stmt) {
+        return false;
+    }
+    $stmt->bind_param('sssssiii', $date_intervention, $description_action, $personne_agent, $date_sys, $resultat, $id_chef_atelier, $id_panne, $intervention_id);
+    $result = $stmt->execute();
+    $stmt->close();
+    return $result;
 }
 ?>
